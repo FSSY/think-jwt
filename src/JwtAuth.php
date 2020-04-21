@@ -63,8 +63,7 @@ class JwtAuth implements AuthInterface
         int $issuedAt = 0,
         int $canOnlyBeUsedAfter = 0,
         string $salt = ''
-    )
-    {
+    ) {
         $this->issuedBy = $issuedBy ?: Env::get('jwt.iss', 'example.com');
         $this->permittedFor = $permittedFor ?: Env::get('jwt.aud', 'example.org');
         $this->identifiedBy = $identifiedBy ?: Env::get('jwt.jti', 'seworlsfjslfxxdsfj');

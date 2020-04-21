@@ -2,7 +2,7 @@
 
 namespace fssy\jwt\exception;
 
-use think\Exception;
+use Exception;
 use Throwable;
 
 class TokenException extends Exception
