@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace fssy\jwt;
 
 use fssy\jwt\exception\TokenDoesNotExistException;
+use fssy\jwt\exception\TokenDoesNotMatchTheSceneException;
 use fssy\jwt\exception\TokenExpiredException;
 use fssy\jwt\exception\TokenIsNotValidException;
 use Lcobucci\JWT\Builder;
@@ -102,6 +103,7 @@ class JwtAuth implements AuthInterface
      * @throws TokenDoesNotExistException
      * @throws TokenIsNotValidException
      * @throws TokenExpiredException
+     * @throws TokenDoesNotMatchTheSceneException
      */
     public function getId(string $token): int
     {
@@ -125,7 +127,9 @@ class JwtAuth implements AuthInterface
         }
 
         // verifies the use of token scenarios
-        // token does not match the scene
+        if ($this->scene != $token->getClaim('scene')) {
+            throw new TokenDoesNotMatchTheSceneException();
+        }
 
         return (int)$token->getClaim('id');
     }
