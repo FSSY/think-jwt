@@ -56,13 +56,20 @@ class JwtAuth implements AuthInterface
      */
     private $salt;
 
+    /**
+     * Configures the use of token scenarios
+     * @var string
+     */
+    private $scene = 'default';
+
     public function __construct(
         string $issuedBy = '',
         string $permittedFor = '',
         string $identifiedBy = '',
         int $issuedAt = 0,
         int $canOnlyBeUsedAfter = 0,
-        string $salt = ''
+        string $salt = '',
+        string $scene = 'default'
     ) {
         $this->issuedBy = $issuedBy ?: Env::get('jwt.iss', 'example.com');
         $this->permittedFor = $permittedFor ?: Env::get('jwt.aud', 'example.org');
@@ -70,6 +77,7 @@ class JwtAuth implements AuthInterface
         $this->issuedAt = $issuedAt ?: time();
         $this->canOnlyBeUsedAfter = $canOnlyBeUsedAfter ?: time();
         $this->salt = $salt ?: Env::get('jwt.salt', '12323ljdsalfsdalfjlxcvjdfhoewro');
+        $this->scene = $scene;
     }
 
 
@@ -85,6 +93,7 @@ class JwtAuth implements AuthInterface
             ->canOnlyBeUsedAfter($this->canOnlyBeUsedAfter)
             ->expiresAt(time() + $duration)
             ->withClaim('id', $id)
+            ->withClaim('scene', $this->scene)
             ->getToken(new Sha256(), new Key($this->salt));
     }
 
@@ -100,13 +109,13 @@ class JwtAuth implements AuthInterface
             throw new TokenDoesNotExistException();
         }
 
-        // Verifies signature
+        // Verifies the token signature
         $token = (new Parser())->parse($token);
         if (!$token->verify(new Sha256(), $this->salt)) {
             throw new TokenIsNotValidException();
         }
 
-        // Verifies token validity
+        // Verifies the token validity
         $data = new ValidationData();
         $data->setIssuer($this->issuedBy);
         $data->setAudience($this->permittedFor);
@@ -115,6 +124,29 @@ class JwtAuth implements AuthInterface
             throw new TokenExpiredException();
         }
 
+        // verifies the use of token scenarios
+        // token does not match the scene
+
         return (int)$token->getClaim('id');
+    }
+
+    /**
+     * Sets the scene
+     * @param string $scene scene
+     * @return $this
+     */
+    public function setScene(string $scene): JwtAuth
+    {
+        $this->scene = $scene;
+        return $this;
+    }
+
+    /**
+     * Gets the scene
+     * @return string
+     */
+    public function getScene()
+    {
+        return $this->scene;
     }
 }

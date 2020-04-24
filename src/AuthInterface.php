@@ -9,7 +9,6 @@ namespace fssy\jwt;
  */
 interface AuthInterface
 {
-
     /**
      * Issues token
      * @param int $id id
