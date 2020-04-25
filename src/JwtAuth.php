@@ -25,43 +25,43 @@ class JwtAuth implements AuthInterface
      * Configures the issuer (iss claim)
      * @var string
      */
-    private $issuedBy;
+    private string $issuedBy;
 
     /**
      * Configures the audience (aud claim)
      * @var string
      */
-    private $permittedFor;
+    private string $permittedFor;
 
     /**
      * Configures the id (jti claim), replicating as a header item
      * @var string
      */
-    private $identifiedBy;
+    private string $identifiedBy;
 
     /**
      * Configures the time that the token was issue (iat claim)
      * @var int
      */
-    private $issuedAt;
+    private int $issuedAt;
 
     /**
      * Configures the time that the token can be used (nbf claim)
      * @var int
      */
-    private $canOnlyBeUsedAfter;
+    private int $canOnlyBeUsedAfter;
 
     /**
      * Configures the salt for token generating
      * @var string
      */
-    private $salt;
+    private string $salt;
 
     /**
      * Configures the use of token scenarios
      * @var string
      */
-    private $scene = 'default';
+    private string $scene = 'default';
 
     public function __construct(
         string $issuedBy = '',
