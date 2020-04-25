@@ -25,19 +25,19 @@ class JwtAuth implements AuthInterface
      * Configures the issuer (iss claim)
      * @var string
      */
-    private string $issuedBy;
+    private string $issuedBy = 'example.com';
 
     /**
      * Configures the audience (aud claim)
      * @var string
      */
-    private string $permittedFor;
+    private string $permittedFor = 'example.org';
 
     /**
      * Configures the id (jti claim), replicating as a header item
      * @var string
      */
-    private string $identifiedBy;
+    private string $identifiedBy = 'identifiedBy';
 
     /**
      * Configures the time that the token was issue (iat claim)
@@ -55,7 +55,7 @@ class JwtAuth implements AuthInterface
      * Configures the salt for token generating
      * @var string
      */
-    private string $salt;
+    private string $salt = 'salt';
 
     /**
      * Configures the use of token scenarios
@@ -71,13 +71,14 @@ class JwtAuth implements AuthInterface
         int $canOnlyBeUsedAfter = 0,
         string $salt = '',
         string $scene = 'default'
-    ) {
-        $this->issuedBy = $issuedBy ?: Env::get('jwt.iss', 'example.com');
-        $this->permittedFor = $permittedFor ?: Env::get('jwt.aud', 'example.org');
-        $this->identifiedBy = $identifiedBy ?: Env::get('jwt.jti', 'seworlsfjslfxxdsfj');
+    )
+    {
+        $this->issuedBy = $issuedBy ?: Env::get('jwt.iss', $this->issuedBy);
+        $this->permittedFor = $permittedFor ?: Env::get('jwt.aud', $this->permittedFor);
+        $this->identifiedBy = $identifiedBy ?: Env::get('jwt.jti', $this->identifiedBy);
         $this->issuedAt = $issuedAt ?: time();
         $this->canOnlyBeUsedAfter = $canOnlyBeUsedAfter ?: time();
-        $this->salt = $salt ?: Env::get('jwt.salt', '12323ljdsalfsdalfjlxcvjdfhoewro');
+        $this->salt = $salt ?: Env::get('jwt.salt', $this->salt);
         $this->scene = $scene;
     }
 
