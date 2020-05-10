@@ -11,16 +11,16 @@ interface AuthInterface
 {
     /**
      * Issues token
-     * @param int $id id
+     * @param string $id id
      * @param int $duration duration
      * @return string 返回签发的token
      */
-    public function issueToken(int $id, int $duration = 0): string;
+    public function issueToken(string $id, int $duration = 0): string;
 
     /**
      * Retrieves the uid from the token and return a negative number on failure
      * @param string $token token
-     * @return int
+     * @return string
      */
-    public function getId(string $token): int;
+    public function getId(string $token): string;
 }

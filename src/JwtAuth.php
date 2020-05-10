@@ -71,8 +71,7 @@ class JwtAuth implements AuthInterface
         int $canOnlyBeUsedAfter = 0,
         string $salt = '',
         string $scene = 'default'
-    )
-    {
+    ) {
         $this->issuedBy = $issuedBy ?: Env::get('jwt.iss', $this->issuedBy);
         $this->permittedFor = $permittedFor ?: Env::get('jwt.aud', $this->permittedFor);
         $this->identifiedBy = $identifiedBy ?: Env::get('jwt.jti', $this->identifiedBy);
@@ -86,7 +85,7 @@ class JwtAuth implements AuthInterface
     /**
      * @inheritDoc
      */
-    public function issueToken(int $id, int $duration = 0): string
+    public function issueToken(string $id, int $duration = 0): string
     {
         return (string)(new Builder())->issuedBy($this->issuedBy)
             ->permittedFor($this->permittedFor)
@@ -106,7 +105,7 @@ class JwtAuth implements AuthInterface
      * @throws TokenExpiredException
      * @throws TokenDoesNotMatchTheSceneException
      */
-    public function getId(string $token): int
+    public function getId(string $token): string
     {
         if (!$token) {
             throw new TokenDoesNotExistException();
@@ -132,7 +131,7 @@ class JwtAuth implements AuthInterface
             throw new TokenDoesNotMatchTheSceneException();
         }
 
-        return (int)$token->getClaim('id');
+        return $token->getClaim('id');
     }
 
     /**
