@@ -131,7 +131,7 @@ class JwtAuth implements AuthInterface
             throw new TokenDoesNotMatchTheSceneException();
         }
 
-        return $token->getClaim('id');
+        return (string)$token->getClaim('id');
     }
 
     /**
